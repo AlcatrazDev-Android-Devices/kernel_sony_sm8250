@@ -736,3 +736,6 @@ CONFIG_UCLAMP_BUCKETS_COUNT=20
 
 # ARM errata workarounds via the alternatives framework
 CONFIG_HZ_300=y
+
+# General architecture-dependent options
+CONFIG_SHADOW_CALL_STACK=y

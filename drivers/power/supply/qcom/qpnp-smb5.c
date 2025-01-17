@@ -2290,6 +2290,7 @@ static enum power_supply_property smb5_batt_ext_props[] = {
 	POWER_SUPPLY_PROP_SMART_CHARGING_ACTIVATION,
 	POWER_SUPPLY_PROP_SMART_CHARGING_INTERRUPTION,
 	POWER_SUPPLY_PROP_SMART_CHARGING_STATUS,
+	POWER_SUPPLY_PROP_HS_POWER_SUPPLY_ENFORCE,
 	POWER_SUPPLY_PROP_LRC_ENABLE,
 	POWER_SUPPLY_PROP_LRC_SOCMAX,
 	POWER_SUPPLY_PROP_LRC_SOCMIN,
@@ -2316,6 +2317,9 @@ static int smb5_batt_ext_get_prop(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_SMART_CHARGING_INTERRUPTION:
 	case POWER_SUPPLY_PROP_SMART_CHARGING_STATUS:
 		val->intval = chg->smart_charge_suspended;
+		break;
+	case POWER_SUPPLY_PROP_HS_POWER_SUPPLY_ENFORCE:
+		val->intval = chg->hspower_enforce;
 		break;
 	case POWER_SUPPLY_PROP_LRC_ENABLE:
 		val->intval = chg->lrc_enabled;
@@ -2379,6 +2383,13 @@ static int smb5_batt_ext_set_prop(struct power_supply *psy,
 			power_supply_changed(chg->batt_psy);
 		}
 		break;
+	case POWER_SUPPLY_PROP_HS_POWER_SUPPLY_ENFORCE:
+		if (chg->smart_charge_enabled) {
+			chg->hspower_enforce = (bool)val->intval;
+			rc = smblib_somc_smart_set_suspend(chg);
+			power_supply_changed(chg->batt_psy);
+		}
+		break;
 	case POWER_SUPPLY_PROP_LRC_ENABLE:
 		chg->lrc_enabled = val->intval;
 		smblib_somc_lrc_check(chg);
@@ -2427,6 +2438,7 @@ static int smb5_batt_ext_prop_is_writeable(struct power_supply *psy,
 	switch (psp) {
 	case POWER_SUPPLY_PROP_SMART_CHARGING_ACTIVATION:
 	case POWER_SUPPLY_PROP_SMART_CHARGING_INTERRUPTION:
+	case POWER_SUPPLY_PROP_HS_POWER_SUPPLY_ENFORCE:
 	case POWER_SUPPLY_PROP_LRC_ENABLE:
 	case POWER_SUPPLY_PROP_LRC_SOCMAX:
 	case POWER_SUPPLY_PROP_LRC_SOCMIN:

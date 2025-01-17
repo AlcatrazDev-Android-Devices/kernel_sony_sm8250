@@ -503,6 +503,7 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(smart_charging_activation),
 	POWER_SUPPLY_ATTR(smart_charging_interruption),
 	POWER_SUPPLY_ATTR(smart_charging_status),
+	POWER_SUPPLY_ATTR(hs_power_supply_enforce),
 	POWER_SUPPLY_ATTR(chg_pwr_fcc),
 	POWER_SUPPLY_ATTR(chg_pwr_icl),
 	POWER_SUPPLY_ATTR(chg_pwr_indication_control),

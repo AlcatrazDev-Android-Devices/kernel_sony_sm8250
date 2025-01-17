@@ -9056,6 +9056,7 @@ static void smblib_somc_smart_charge_wdog_work(struct work_struct *work)
 	mutex_lock(&chg->smart_charge_lock);
 	vote(chg->chg_disable_votable, BATTCHG_SMART_EN_VOTER, false, 0);
 	chg->smart_charge_suspended = false;
+	chg->hspower_enforce = false;
 	mutex_unlock(&chg->smart_charge_lock);
 
 	power_supply_changed(chg->batt_psy);
@@ -9670,7 +9671,7 @@ int smblib_somc_smart_set_suspend(struct smb_charger *chg)
 		goto exit;
 	}
 
-	if (chg->smart_charge_suspended)
+	if (chg->hspower_enforce || chg->smart_charge_suspended)
 		start_fake_charging(chg, BATTCHG_SMART_EN_VOTER);
 	else
 		stop_fake_charging(chg, BATTCHG_SMART_EN_VOTER,
@@ -9683,8 +9684,8 @@ int smblib_somc_smart_set_suspend(struct smb_charger *chg)
 		goto exit;
 	}
 
-	smblib_dbg(chg, PR_SOMC, "voted for smart charging (%d).\n",
-					chg->smart_charge_suspended);
+	smblib_dbg(chg, PR_SOMC, "voted for smart charging (%d), forced hspower (%d).\n",
+					chg->smart_charge_suspended, chg->hspower_enforce);
 	cancel_delayed_work_sync(&chg->smart_charge_wdog_work);
 	if (chg->smart_charge_suspended) {
 		schedule_delayed_work(&chg->smart_charge_wdog_work,

@@ -328,3 +328,8 @@
 #include "charger-edo-common.dtsi"
 #include "charger-edo-pdx203.dtsi"
 #include "usb-dp-edo-pdx203.dtsi"
+
+//#include "charger-edo-pdx203-4500mk3.dtsi"
+//#include "charger-edo-pdx203-5000mk4.dtsi"
+//#include "charger-edo-pdx206-4500mk3.dtsi"
+//#include "charger-edo-pdx206-5000mk4.dtsi"
